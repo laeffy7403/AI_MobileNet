@@ -7,7 +7,8 @@ from torch.optim import Adam
 from tqdm import tqdm
 from sklearn.utils.class_weight import compute_class_weight
 import numpy as np
-
+import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 # === Training Function ===
 def train_model(model, criterion, optimizer, train_loader, val_loader, device, epochs):
     for epoch in range(epochs):
@@ -48,6 +49,30 @@ def train_model(model, criterion, optimizer, train_loader, val_loader, device, e
 
         val_acc = 100.0 * val_correct / val_total
         print(f"✅ Validation Accuracy after Epoch {epoch+1}: {val_acc:.2f}%")
+        
+# === Confusion Matrix ===
+def plot_confusion_matrix(model, dataloader, device, class_names):
+    model.eval()
+    all_preds = []
+    all_labels = []
+
+    with torch.no_grad():
+        for images, labels in dataloader:
+            images = images.to(device)
+            labels = labels.to(device)
+            outputs = model(images)
+            _, preds = torch.max(outputs, 1)
+            all_preds.extend(preds.cpu().numpy())
+            all_labels.extend(labels.cpu().numpy())
+
+    cm = confusion_matrix(all_labels, all_preds)
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=class_names)
+    fig, ax = plt.subplots(figsize=(12, 12))
+    disp.plot(ax=ax, xticks_rotation=90, cmap=plt.cm.Blues)
+    plt.title("📊 Confusion Matrix (Validation Set)")
+    plt.tight_layout()
+    plt.savefig("confusion_matrix.png")  # Save image
+    plt.show()
 
 # === Main logic ===
 if __name__ == "__main__":
@@ -127,3 +152,6 @@ if __name__ == "__main__":
     # === Save the Model ===
     torch.save(model.state_dict(), "mobilenet70breeds_finetuned.pth")
     print("💾 Model saved as mobilenet70breeds_finetuned.pth")
+    # === Plot Confusion Matrix ===
+    class_names = train_dataset.classes
+    plot_confusion_matrix(model, val_loader, device, class_names)
