@@ -10,8 +10,8 @@ class_names = os.listdir("dataset/train")
 
 # Load trained model
 model = models.mobilenet_v2()
-model.classifier[1] = torch.nn.Linear(model.classifier[1].in_features, 70)
-model.load_state_dict(torch.load("mobilenet70breeds_finetuned.pth", map_location=torch.device('cuda' if torch.cuda.is_available() else 'cpu')))
+model.classifier[1] = torch.nn.Linear(model.classifier[1].in_features, 29)
+model.load_state_dict(torch.load("mobilenet70breeds_thingwei.pth", map_location=torch.device('cuda' if torch.cuda.is_available() else 'cpu')))
 model.eval()
 
 # Move to device

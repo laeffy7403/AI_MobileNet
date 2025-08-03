@@ -71,7 +71,7 @@ def plot_confusion_matrix(model, dataloader, device, class_names):
     disp.plot(ax=ax, xticks_rotation=90, cmap=plt.cm.Blues)
     plt.title("📊 Confusion Matrix (Validation Set)")
     plt.tight_layout()
-    plt.savefig("confusion_matrix.png")  # Save image
+    plt.savefig("confusion_matrix2.png")  # Save image
     plt.show()
 
 # === Main logic ===
@@ -79,7 +79,7 @@ if __name__ == "__main__":
     # === Configuration ===
     train_dir = "dataset/train"
     val_dir = "dataset/valid"
-    num_classes = 70
+    num_classes = 29
     batch_size = 32
     initial_epochs = 5
     fine_tune_epochs = 10
@@ -150,8 +150,8 @@ if __name__ == "__main__":
     train_model(model, criterion, optimizer, train_loader, val_loader, device, fine_tune_epochs)
 
     # === Save the Model ===
-    torch.save(model.state_dict(), "mobilenet70breeds_finetuned.pth")
-    print("💾 Model saved as mobilenet70breeds_finetuned.pth")
+    torch.save(model.state_dict(), "mobilenet70breeds_thingwei.pth")
+    print("💾 Model saved as mobilenet70breeds_thingwei.pth")
     # === Plot Confusion Matrix ===
     class_names = train_dataset.classes
     plot_confusion_matrix(model, val_loader, device, class_names)
