@@ -1,8 +1,9 @@
+
 import os
 import shutil
 import random
 
-source_dir = "29_classes"  # Your folder with 29 subfolders of dog breeds
+source_dir = "dataset/train"  # Your folder with 29 subfolders of dog breeds
 dest_dir = "dataset"
 train_ratio = 0.8  # 80% train, 20% valid
 
